@@ -1,84 +1,92 @@
 ﻿#include <iostream>
+#include <string>
+#include <vector>
+
 using namespace std;
+
+
+string reverse(string& s)
+{
+	int n = s.length();
+	for (int i = 0; i < n / 2; i++)
+		swap(s[i], s[n - i - 1]);
+	return s;
+}
+
+void zanull(string &c, string &d)
+{
+	reverse(c);
+	reverse(d);
+	if (c.size() >= d.size())
+	{
+		while (c.size() != d.size())
+			d.push_back('0');
+	}
+	else
+	{
+		while (c.size() != d.size())
+			c.push_back('0');
+	}
+}
+
+
+void mult (string a, string b)
+{
+	zanull(a, b);
+
+	vector<int> vector1( 2 * a.size());
+
+	for (int i = 0; i < a.size(); i++)
+	{
+		int carry = 0;
+		for (int j = 0; j < a.size(); j++)
+		{
+			vector1[i + j] += carry + (a[i] - 48) * (b[j] - 48);
+			carry = vector1[i + j] / 10;
+			vector1[i + j] %= 10;
+		}
+		vector1[i + a.size()] += carry;
+	}
+
+	while (vector1[vector1.size() - 1] == 0 && vector1.size() != 1)
+		vector1.resize(vector1.size() - 1);
+
+	vector1.shrink_to_fit();
+
+	for (int i = vector1.size() - 1; i >= 0; i--)
+	{
+		{
+			cout << vector1[i];
+		}		
+	}
+}
+
+
+void sum(string a, string b)
+{
+	zanull(a, b);
+
+	for (int i = 0; i < a.size(); i++)
+	{
+		a[i] = (a[i] - '0') + (b[i] - '0');
+		a[i + 1] = ((a[i + 1] - '0') + (a[i] / 10)) + '0';
+		a[i] = (a[i] % 10) + '0';
+	}
+
+
+	if (a[a.size()] == 1)
+		a[a.size()] += '0';
+
+
+	for (int i = a.size(); i >= 0; i--)
+		cout << (a[i]);
+}
 
 int main()
 {
-	int a = 1000;
-	int length_of_sum = 1001;
-	int length_of_mult = 2001;
-
-	int masA[1000];
-	int masB[1000];
-	int* masC = new int[length_of_sum];
-	int* masD = new int[length_of_mult];
-
-	int t1 = 0;
-	int t2 = 0;
-
-	unsigned long long A, B;
-	std::cin >> A >> B;
-
-	while (A > 0)
-	{
-		masA[t1] = A % 10;
-		A = A / 10;
-		t1++;
-	}
-
-	for (int i = t1; i < a; i++)
-		masA[i] = 0;
-
-	while (B > 0)
-	{
-		masB[t2] = B % 10;
-		B = B / 10;
-		t2++;
-	}
-
-	for (int i = t2; i < a; i++)
-		masB[i] = 0;
-
-
-	for (int i = 0; i < length_of_sum; i++)
-		masC[i] = 0;
-
-	for (int i = 0; i < length_of_mult; i++)
-		masD[i] = 0;
-
-	for (int i = 0; i < length_of_sum; i++)
-	{
-		masC[i] += masA[i] + masB[i];
-		masC[i + 1] += (masC[i] / 10);
-		masC[i] %= 10;
-
-	}
-
-	while (masC[length_of_sum - 1] == 0)
-	{
-		length_of_sum--;
-	}
-
-	for (int i = length_of_sum - 1; i >= 0; i--)
-		std::cout << masC[i];
-
-
-
-
-	for (int i = 0; i < a; i++)
-		for (int j = 0; j < a; j++)
-			masD[i + j] += masA[i] * masB[j];
-
-	for (int i = 0; i < length_of_mult; i++)
-	{
-		masD[i + 1] += masD[i] / 10;
-		masD[i] %= 10;
-	}
-
-	while (masD[length_of_mult - 1] == 0)
-		length_of_mult--;
-
-	std::cout << std::endl;
-
-	for (int i = length_of_mult - 1; i >= 0; i--)
-		std::cout << masD[i];
+	string t, n;
+	cin >> t >> n;
+	sum(t, n);
+	cout << endl;
+	mult(t, n);
 }
